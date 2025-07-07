@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<head>
+
+    <script src="/production/01_Initialize/globalFunctions.js" defer></script>
+
+    <script src="/production/01_Initialize/getSecurityInfo.js" defer></script>
+    <script src="/production/01_Initialize/getFullQuote.js" defer></script>
+    <script src="/production/02_ESG_Analysis/getESG.js" defer></script>
+    <script src="/production/03_Technical_Sentiment/getPivotIndicator.js" defer></script>
+    <script src="/production/03_Technical_Sentiment/getTechnicalIndicators.js" defer></script>
+    <script src="/production/04_Public_Sentiment/getFearGreed.js" defer></script>
+    <script src="/production/04_Public_Sentiment/getPublicSentimentIndex.js" defer></script>
+    <script src="/production/05_Fundamental_Analysis/getFundamentalAnalysis.js" defer></script>
+</head>
+
+<body>
+    <script>
+        function Export_ExchangeCentre() {
+            const stored = JSON.parse(localStorage.getItem('_data_StockBasicDetails'));
+            if (stored) {
+                return stored.exchange;
+            }
+        }
+
+        async function main(SecuritySymbol, ExchangeCentre, API_KEY) {
+            // - /production/01_Initialize/getSecurity.js
+            await fetchAndStoreStockBasicDetails(`${SecuritySymbol}`, `${API_KEY}`);
+            executeOnReady('_readystate_StockBasicDetails', Export_StockBasicDetails);
+            //var ExchangeCentre = Export_ExchangeCentre();
+            //console.log("ExchangeCentre:" + ExchangeCentre)
+
+            // - /production/01_Initialize/getFullQuote.js
+            await fetchFullQuote(`${SecuritySymbol}`, `${API_KEY}`);
+            executeOnReady('_readystate_FullQuote', Export_FullQuote);
+
+            // - /production/02_ESG_Analysis/getESG.js
+            //getESGRating(`${SecuritySymbol}`);
+            //executeOnReady("_readystate_ESG", Export_ESG);
+
+            // - /production/03_Technical_Sentiment/getPivotIndicator.js
+            await getPivotScores(`${ExchangeCentre}:${SecuritySymbol}`);
+
+            executeOnReady("_readystate_PivotIndicators", Export_PivotIndicators);
+            executeOnReady("_readystate_RawPivotIndicators", Export_RawPivotIndicators);
+
+            // - /production/03_Technical_Sentiment/getTechnicalIndicators.js
+            await getTechnicalAnalysisScores(`${ExchangeCentre}:${SecuritySymbol}`);
+            executeOnReady('_readystate_OscillatorData', Export_OscillatorData);
+            executeOnReady('_readystate_MAData', Export_MAData);
+
+            // - /production/04_Public_Sentiment/getFearGreed.js
+            await fetchFearAndGreedIndex();
+            executeOnReady('_readystate_FearGreedData', Export_FearGreedData);
+
+            // - /production/04_Public_Sentiment/getPublicSentimentIndex.js
+            await getPublicSentimentIndex(`${SecuritySymbol}`);
+            executeOnReady('_readystate_PublicSentimentIndex', Export_PublicSentimentIndex);
+
+            // - /production/05_Fundamental_Analysis/getFundamentalAnalysis.js
+            await analyzeFinancials(`${SecuritySymbol}`, `${API_KEY}`);
+            executeOnReady('_readystate_FundamentalAnalysis', Export_FundamentalAnalysis);
+        }
+
+        //main("AAPL", "NASDAQ", API_KEY);
+
+    </script>
+</body>
+<!-- <script src="" defer></script> -->

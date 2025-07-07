@@ -1,0 +1,7 @@
+_data_{ID}
+for collected data points 
+
+_readystate_{ID}
+for telling the next funtion if a particular data is ready
+
+ID should remain constant in both scenarios.
