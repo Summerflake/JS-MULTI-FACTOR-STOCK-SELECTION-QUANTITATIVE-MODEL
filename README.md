@@ -13,7 +13,7 @@
 
 | Indicator Type | Weight in Section | Number of Metrics Used |
 |----------|----------|----------|
-| Public Sentiment | 40% Short Term     | 7        |
+| Sentiment (Public) | 40% Short Term     | 7        |
 | Technical Sentiment    | 60% Short Term     | 27      |
 | ESG Analysis  |  40% Long Term     |  4    |
 | Fundamental Analysis  | 60% Long Term     | 23      |
