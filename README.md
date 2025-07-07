@@ -25,7 +25,7 @@ TODO:
 - [ ] Complete front end version of the code
 
 ## Dependencies
-[Financial Modeling Prep API](https://financialmodelingprep.com/) 
+[Financial Modeling Prep](https://financialmodelingprep.com/) 
 
 [Yahoo Finance](https://finance.yahoo.com/) 
 
