@@ -17,7 +17,7 @@
 | Technical Sentiment    | 60% Short Term     | 27      |
 | ESG Analysis  |  40% Long Term     |  4    |
 | Fundamental Analysis  | 60% Long Term     | 23      |
-| Total      | 61      |
+| Total      | |61      |
 
 TODO:
 - [ ] Add customisable configuration files
