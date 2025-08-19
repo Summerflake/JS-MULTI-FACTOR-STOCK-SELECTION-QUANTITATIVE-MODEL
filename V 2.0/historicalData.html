@@ -1,0 +1,82 @@
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<canvas id="priceChart" width="800" height="400"></canvas>
+
+<script>
+    let chartInstance = null;
+
+    // Apply canvas styling dynamically via JS
+    const canvas = document.getElementById('priceChart');
+    canvas.style.backgroundColor = '#222';
+    canvas.style.borderRadius = '8px';
+    canvas.style.boxShadow = '0 4px 12px rgba(0,0,0,0.5)';
+    canvas.style.padding = '14px';
+
+    // Helper: calculate EMA
+    function calculateEMA(data, period) {
+        let k = 2 / (period + 1);
+        let emaArray = [];
+        data.forEach((price, i) => {
+            if (i === 0) {
+                emaArray.push(price);
+            } else {
+                emaArray.push(price * k + emaArray[i - 1] * (1 - k));
+            }
+        });
+        return emaArray;
+    }
+
+    function drawHistoricalPrice(prices, color = '#1e90ff', emaCount = 30) {
+        const ctx = canvas.getContext('2d');
+
+        // Generate labels from the data itself
+        const labels = prices.map((_, i) => i + 1);
+
+        // Calculate EMA
+        const ema = calculateEMA(prices, emaCount);
+
+        if (chartInstance) chartInstance.destroy();
+
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Price',
+                        data: prices,
+                        borderColor: color,
+                        backgroundColor: color + '33', // 20% opacity
+                        fill: true,
+                        tension: 0.3
+                    },
+                    {
+                        label: emaCount + ' EMA',
+                        data: ema,
+                        borderColor: '#ff6347',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true, labels: { color: '#eaeaea' } }
+                },
+                scales: {
+                    x: { ticks: { color: '#eaeaea' }, grid: { color: '#222' } },
+                    y: { ticks: { color: '#eaeaea' }, grid: { color: '#222' } }
+                }
+            }
+        });
+    }
+
+    // Example usage
+    const historicalPrices = [100, 102, 101, 105, 107, 110, 108, 111, 115, 117, 120, 119, 121, 125, 130];
+    drawHistoricalPrice(historicalPrices, '#1e90ff', 30);
+
+</script>
